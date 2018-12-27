@@ -2,12 +2,11 @@ import click
 import redis
 from prometheus_client import start_http_server
 
-from huey_exporter.EventQueue import EventQueue
+from huey_exporter.EventListener import EventListener
 from huey_exporter.exporter_logging import logger
-from logging import StreamHandler
 
-logger.setLevel('INFO')
-logger.addHandler(StreamHandler())
+
+
 
 
 @click.command()
@@ -16,20 +15,20 @@ logger.addHandler(StreamHandler())
               default='redis://localhost:6379',
               help='Connection string to redis including database. for example redis://localhost:6379/0'
               )
-@click.option('--queue-name',
-              '-q', envvar='QUEUE_NAME',
-              required=True,
-              multiple=True,
-              help='Name of the queue to monitor. Multiple allowed.'
-              )
 @click.option('--port', '-p',
               envvar='EXPORTER_PORT',
               default=9100,
               type=click.IntRange(0, 65535),
               help='Port to expose the metrics on'
               )
-def run_exporter(connection_string, queue_name, port):
-    logger.info('Listen on queues {}'.format(', '.join(queue_name)))
+@click.option('--logging-level', '-l',
+              envvar='LOGGING_LEVEL',
+              default='INFO',
+              help='Set the logging level of the huey-exporter'
+              )
+def run_exporter(connection_string, port, logging_level):
+    logger.setLevel(logging_level)
+
     # Start up the server to expose the metrics.
     start_http_server(port)
     connection_pool = redis.BlockingConnectionPool.from_url(
@@ -37,13 +36,10 @@ def run_exporter(connection_string, queue_name, port):
             max_connections=5,
             timeout=10
     )
-    queue = EventQueue(queue_name, connection_pool)
+
+    queue = EventListener(connection_pool)
     queue.listen()
 
 
-def main():
-    run_exporter()
-
-
 if __name__ == '__main__':
-    main()
+    run_exporter()
