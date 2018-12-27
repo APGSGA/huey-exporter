@@ -1,4 +1,5 @@
 import re
+import time
 from datetime import datetime, timedelta
 from typing import List, Set
 
@@ -52,7 +53,9 @@ class QueueSubscription:
         logger.info('subscribe to {}'.format(queue_names))
         if self._is_subscribed:
             self.redis_pubsub.unsubscribe()
+            self._is_subscribed = False
         self.redis_pubsub.subscribe(queue_names)
+        self._is_subscribed = True
 
 
 class EventListener:
@@ -75,17 +78,29 @@ class EventListener:
     def pull_cleaned_queue_names(self) -> List[str]:
         return self._clean_queue_names(list(self._queue_names()))
 
+    def wait_on_queue_names(self) -> List[str]:
+        """
+        Waits until at least one queue name is received.
+        :return:
+        """
+        while True:
+            queue_names = self.pull_cleaned_queue_names()
+            if len(queue_names) > 0:
+                return queue_names
+            time.sleep(1)
+            logger.warning('No huey queue found. Try again in 1 seconds.')
+
     def listen(self):
         """
         Listens to the queues and actively explorers queue names.
         :return:
         """
-        queue_names = self.pull_cleaned_queue_names()
 
+        queue_names = self.wait_on_queue_names()
         self.subscription.subscribe(queue_names)
         while True:
             self.listen_cicle()
-            new_queue_names = self.pull_cleaned_queue_names()
+            new_queue_names = self.wait_on_queue_names()
             if new_queue_names != queue_names:
                 queue_names = new_queue_names
                 self.subscription.subscribe(queue_names)
