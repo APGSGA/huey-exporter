@@ -45,7 +45,7 @@ The usage is the same as the non-docker.
 
 Example:
 ```
-docker run -e REDIS_CONNECTION_STRING=redis://somehost:6379/0 sebu/huey-exporter
+docker run -e REDIS_CONNECTION_STRING=redis://somehost:6379/0 apgsga/huey-exporter
 ```
 
 ## Exposed Metrics
