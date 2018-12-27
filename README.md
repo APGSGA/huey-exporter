@@ -1,5 +1,5 @@
 # Huey Prometheus Exporter
-This project provides metrics about the [huey task queue](https://github.com/coleifer/huey) for prometheus
+This project provides metrics about the [huey task queue](https://github.com/coleifer/huey) for prometheus.
 
 Latest Version: **0.2.0**
 
@@ -8,14 +8,16 @@ Latest Version: **0.2.0**
 #### Installation
 Installation of the latest release:
 ```
-pip install git+https://github.com/MarcoGlauser/huey-exporter.git@0.1.1
+pip install git+https://github.com/APGSGA/huey-exporter.git@0.1.1
 ```
 Installation of the master branch:
 ```
-pip install git+https://github.com/MarcoGlauser/huey-exporter.git@master
+pip install git+https://github.com/APGSGA/huey-exporter.git@master
 ```
 
 The command `huey_exporter` will start a webserver (default port 9100) and serves the metrics.
+
+The exporter will explore the Redis instance and therefore find the huey queue names by themself.  
 
 #### Running
 ```
@@ -43,7 +45,7 @@ The usage is the same as the non-docker.
 
 Example:
 ```
-docker run -e REDIS_CONNECTION_STRING=redis://somehost:6379/0 mglauser/huey-exporter
+docker run -e REDIS_CONNECTION_STRING=redis://somehost:6379/0 sebu/huey-exporter
 ```
 
 ## Exposed Metrics
