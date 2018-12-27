@@ -24,17 +24,18 @@ Usage: huey_exporter [OPTIONS]
 Options:
   -c, --connection-string TEXT  Connection string to redis including database.
                                 for example redis://localhost:6379/0
-  -q, --queue-name TEXT         Name of the queue to monitor  [required]. Multiple allowed.
-  -p, --port TEXT               Port to expose the metrics on
+  -p, --port TEXT               Port to expose the metrics on.
+  --logging-level               Logging level of the exporter. Default is INFO.
+                                DEBUG | INFO | WARNING | ERROR
   --help                        Show this message and exit.
 
 ```
 
 Example:
 ```
-huey_exporter -q test
+huey_exporter
 ```
-The huey_exporter can also be configured by the environment variables `REDIS_CONNECTION_STRING`, `QUEUE_NAME` and `EXPORTER_PORT`
+The huey_exporter can also be configured by the environment variables `REDIS_CONNECTION_STRING`, `LOGGING_LEVEL` and `EXPORTER_PORT`
 ### Docker
 [Image on dockerhub](https://hub.docker.com/r/mglauser/huey-exporter/)
 
@@ -42,7 +43,7 @@ The usage is the same as the non-docker.
 
 Example:
 ```
-docker run -e REDIS_CONNECTION_STRING=redis://somehost:6379/0 -e QUEUE_NAME=test mglauser/huey-exporter
+docker run -e REDIS_CONNECTION_STRING=redis://somehost:6379/0 mglauser/huey-exporter
 ```
 
 ## Exposed Metrics
