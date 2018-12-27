@@ -8,7 +8,7 @@ Latest Version: **0.2.0**
 #### Installation
 Installation of the latest release:
 ```
-pip install git+https://github.com/APGSGA/huey-exporter.git@0.1.1
+pip install git+https://github.com/APGSGA/huey-exporter.git@0.2.0
 ```
 Installation of the master branch:
 ```

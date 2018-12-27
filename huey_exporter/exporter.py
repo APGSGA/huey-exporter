@@ -41,5 +41,8 @@ def run_exporter(connection_string, port, logging_level):
     queue.listen()
 
 
+def main():
+    run_exporter()
+
 if __name__ == '__main__':
     run_exporter()
