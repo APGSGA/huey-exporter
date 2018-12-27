@@ -3,6 +3,11 @@ import redis
 from prometheus_client import start_http_server
 
 from huey_exporter.EventQueue import EventQueue
+from huey_exporter.exporter_logging import logger
+from logging import StreamHandler
+
+logger.setLevel('INFO')
+logger.addHandler(StreamHandler())
 
 
 @click.command()
@@ -14,7 +19,8 @@ from huey_exporter.EventQueue import EventQueue
 @click.option('--queue-name',
               '-q', envvar='QUEUE_NAME',
               required=True,
-              help='Name of the queue to monitor'
+              multiple=True,
+              help='Name of the queue to monitor. Multiple allowed.'
               )
 @click.option('--port', '-p',
               envvar='EXPORTER_PORT',
@@ -23,6 +29,7 @@ from huey_exporter.EventQueue import EventQueue
               help='Port to expose the metrics on'
               )
 def run_exporter(connection_string, queue_name, port):
+    logger.info('Listen on queues {}'.format(', '.join(queue_name)))
     # Start up the server to expose the metrics.
     start_http_server(port)
     connection_pool = redis.BlockingConnectionPool.from_url(

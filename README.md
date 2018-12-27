@@ -1,7 +1,7 @@
 # Huey Prometheus Exporter
 This project provides metrics about the [huey task queue](https://github.com/coleifer/huey) for prometheus
 
-Latest Version: **0.1.1**
+Latest Version: **0.2.0**
 
 ## Usage
 
@@ -24,7 +24,7 @@ Usage: huey_exporter [OPTIONS]
 Options:
   -c, --connection-string TEXT  Connection string to redis including database.
                                 for example redis://localhost:6379/0
-  -q, --queue-name TEXT         Name of the queue to monitor  [required]
+  -q, --queue-name TEXT         Name of the queue to monitor  [required]. Multiple allowed.
   -p, --port TEXT               Port to expose the metrics on
   --help                        Show this message and exit.
 
