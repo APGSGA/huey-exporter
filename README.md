@@ -1,14 +1,14 @@
 # Huey Prometheus Exporter
 This project provides metrics about the [huey task queue](https://github.com/coleifer/huey) for prometheus.
 
-Latest Version: **0.2.0**
+Latest Version: **0.2.1**
 
 ## Usage
 
 #### Installation
 Installation of the latest release:
 ```
-pip install git+https://github.com/APGSGA/huey-exporter.git@0.2.0
+pip install git+https://github.com/APGSGA/huey-exporter.git@0.2.1
 ```
 Installation of the master branch:
 ```
@@ -39,7 +39,7 @@ huey_exporter
 ```
 The huey_exporter can also be configured by the environment variables `REDIS_CONNECTION_STRING`, `LOGGING_LEVEL` and `EXPORTER_PORT`
 ### Docker
-[Image on dockerhub](https://hub.docker.com/r/mglauser/huey-exporter/)
+[Image on dockerhub](https://hub.docker.com/r/apgsga/huey-exporter/)
 
 The usage is the same as the non-docker.
 
