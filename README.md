@@ -1,14 +1,14 @@
 # Huey Prometheus Exporter
 This project provides metrics about the [huey task queue](https://github.com/coleifer/huey) for prometheus.
 
-Latest Version: **0.2.1**
+Latest Version: **0.2.2**
 
 ## Usage
 
 #### Installation
 Installation of the latest release:
 ```
-pip install git+https://github.com/APGSGA/huey-exporter.git@0.2.1
+pip install git+https://github.com/APGSGA/huey-exporter.git@0.2.2
 ```
 Installation of the master branch:
 ```
@@ -27,6 +27,8 @@ Options:
   -c, --connection-string TEXT  Connection string to redis including database.
                                 for example redis://localhost:6379/0
   -p, --port TEXT               Port to expose the metrics on.
+  -q, --queue-expire-time       Sets the expiry time when a queue is not seen anymore.
+                                Stops listening when expired. In seconds. 24h by default.
   --logging-level               Logging level of the exporter. Default is INFO.
                                 DEBUG | INFO | WARNING | ERROR
   --help                        Show this message and exit.
