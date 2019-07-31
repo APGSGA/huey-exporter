@@ -21,18 +21,12 @@ from huey_exporter.exporter_logging import logger
               type=click.IntRange(0, 65535),
               help='Port to expose the metrics on'
               )
-@click.option('--queue-expire-time', '-q',
-              envvar='QUEUE_EXPIRE_TIME',
-              default=60*60*24,
-              type=click.INT,
-              help='Sets the expiry time when a queue is not seen anymore.'
-              )
 @click.option('--logging-level', '-l',
               envvar='LOGGING_LEVEL',
               default='INFO',
               help='Set the logging level of the huey-exporter'
               )
-def run_exporter(connection_string, port, queue_expire_time, logging_level):
+def run_exporter(connection_string, port, logging_level):
     logger.setLevel(logging_level)
 
     # Start up the server to expose the metrics.
@@ -43,7 +37,7 @@ def run_exporter(connection_string, port, queue_expire_time, logging_level):
             timeout=10
     )
 
-    queue = EventListener(connection_pool, queue_expire_time)
+    queue = EventListener(connection_pool)
     queue.listen()
 
 
