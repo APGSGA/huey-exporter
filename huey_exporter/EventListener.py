@@ -8,7 +8,6 @@ import json
 COUNTER = Counter('huey_signals', 'Huey Tasks enqueued', ['queue_name', 'task_name', 'signal', 'hueyx_environment'])
 
 
-
 class EventListener:
     QUEUE_NAME = 'hueyx.huey2.signaling'
 
