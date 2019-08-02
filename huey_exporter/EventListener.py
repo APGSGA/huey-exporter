@@ -5,7 +5,7 @@ from huey_exporter.exporter_logging import logger
 import json
 
 # Create a metric to track time spent and requests made.
-COUNTER = Counter('huey_signals', 'Huey Tasks enqueued', ['queue_name', 'task_name', 'signal'])
+COUNTER = Counter('huey_signals', 'Huey Tasks enqueued', ['queue_name', 'task_name', 'signal', 'hueyx_environment'])
 
 
 
@@ -37,7 +37,7 @@ class EventListener:
     def handle_event(self, data: {}):
         try:
             print(data)
-            COUNTER.labels(data['queue'], data['task'], data['signal']).inc()
+            COUNTER.labels(data['queue'], data['task'], data['signal'], data['environment']).inc()
 
         except KeyError:
             logger.debug(f'Ignored event {data}')
