@@ -5,7 +5,7 @@ from huey_exporter.exporter_logging import logger
 import json
 
 # Create a metric to track time spent and requests made.
-COUNTER = Counter('huey_signals', 'Huey Tasks enqueued', ['queue_name', 'task_name', 'signal', 'hueyx_environment'])
+COUNTER = Counter('hueyx_signals', 'Huey task signals', ['queue_name', 'task_name', 'signal', 'hueyx_environment'])
 
 
 class EventListener:
