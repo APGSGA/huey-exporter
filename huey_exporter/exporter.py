@@ -1,9 +1,14 @@
 import click
 import redis
 from prometheus_client import start_http_server
+import signal
 
 from huey_exporter.EventListener import EventListener
 from huey_exporter.exporter_logging import logger
+from huey_exporter.queue_length.thread import QueueLengthThread
+
+
+queue_length_thread: QueueLengthThread = None
 
 
 
@@ -37,12 +42,32 @@ def run_exporter(connection_string, port, logging_level):
             timeout=10
     )
 
+    start_queue_length_monitoring(connection_pool)
+
     queue = EventListener(connection_pool)
     queue.listen()
 
 
-def main():
-    run_exporter()
+def exit_monitoring_gracefully(*args):
+    queue_length_thread.exit_gracefully()
+    queue_length_thread.join()
+    logger.info('thread joined')
+    exit()
+
+
+def start_queue_length_monitoring(connection_pool):
+    """
+    Start a thread which pulls the length of the huey queue.
+    :param connection_pool:
+    :return:
+    """
+    global queue_length_thread
+    queue_length_thread = QueueLengthThread(connection_pool)
+    queue_length_thread.start()
+
+    signal.signal(signal.SIGINT, exit_monitoring_gracefully)
+    signal.signal(signal.SIGTERM, exit_monitoring_gracefully)
+
 
 if __name__ == '__main__':
     run_exporter()
