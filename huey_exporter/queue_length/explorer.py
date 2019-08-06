@@ -1,3 +1,4 @@
+import pickle
 from typing import List, Dict, Set
 
 from redis import ConnectionPool, Redis
@@ -5,21 +6,38 @@ import time
 
 
 class HueyQueue:
-    def __init__(self, name: str, redis: Redis):
+    _key_prefix = 'huey.redis.'
+
+    def __init__(self, redis_key: str, redis: Redis):
         self.redis: Redis = redis
-        self.name = name
+        self.redis_key = redis_key
+
+    @property
+    def name(self) -> str:
+        return self.redis_key.replace(self._key_prefix, '')
 
     def __str__(self):
-        return f'<{self.name}>'
+        return f'<{self.redis_key}>'
 
     def __eq__(self, other):
-        return self.name == other.name
+        return self.redis_key == other.redis_key
 
     def __hash__(self):
-        return hash(self.name)
+        return hash(self.redis_key)
 
     def __len__(self):
-        return self.redis.llen(self.name)
+        return self.redis.llen(self.redis_key)
+
+    @property
+    def tasks(self) -> Dict[str, int]:
+        task_dict = {}
+        elements = self.redis.lrange(self.redis_key, 0, 0)
+        for element in elements:
+            message = pickle.loads(element)
+            if message.name not in task_dict:
+                task_dict[message.name] = 0
+            task_dict[message.name] += 1
+        return task_dict
 
 
 class HueyExplorer:
@@ -52,14 +70,15 @@ class HueyExplorer:
         """
         for queue in self.queues:
             self._cache.add(queue)
-        return self._cache.get()
+        queues = self._cache.get()
+        return queues
 
 
 class ExpiringCache:
     """
     Class which caches objects for a certain amount of seconds.
     """
-    def __init__(self, expiring_in=60):
+    def __init__(self, expiring_in=60*10):
         self.expiring_in = expiring_in
         self.cache_dict: Dict[HueyQueue, int] = {}
 

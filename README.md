@@ -58,5 +58,11 @@ docker run -e REDIS_CONNECTION_STRING=redis://somehost:6379/0 apgsga/huey-export
 ```
 
 ## Exposed Metrics
-The labels `'queue_name', 'task_name', 'signal', 'hueyx_environment'` are attached to the metric `hueyx_signals`.
+- `hueyx_signals`
+
+Labels: `'queue_name', 'task_name', 'signal', 'hueyx_environment'`.
+
+- `hueyx_queue_task_count`
+
+Labels: `'queue_name', 'task_name'`
 ```
