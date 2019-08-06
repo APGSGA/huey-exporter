@@ -29,8 +29,6 @@ class EventListener:
                 if message['type'] != 'message':
                     continue
                 data = json.loads(message['data'].decode('utf-8'))
-                logger.debug('Received event: {}'.format(json.dumps({'data': data})))
-
                 self.handle_event(data)
 
     def handle_event(self, data: {}):
