@@ -69,5 +69,9 @@ def start_queue_length_monitoring(connection_pool):
     signal.signal(signal.SIGTERM, exit_monitoring_gracefully)
 
 
+def main():
+    run_exporter()
+
+
 if __name__ == '__main__':
     run_exporter()
