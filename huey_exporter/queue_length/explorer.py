@@ -11,6 +11,7 @@ class HueyQueue:
     def __init__(self, redis_key: str, redis: Redis):
         self.redis: Redis = redis
         self.redis_key = redis_key
+        self._last_seen_tasks = []
 
     @property
     def name(self) -> str:
@@ -31,6 +32,10 @@ class HueyQueue:
     @property
     def tasks(self) -> Dict[str, int]:
         task_dict = {}
+
+        for task_name in self._last_seen_tasks:
+            task_dict[task_name] = 0
+
         elements = self.redis.lrange(self.redis_key, 0, -1)
         for element in elements:
             message = pickle.loads(element)
@@ -38,6 +43,9 @@ class HueyQueue:
             if task_name not in task_dict:
                 task_dict[task_name] = 0
             task_dict[task_name] += 1
+
+        self._last_seen_tasks = task_dict.keys()
+
         return task_dict
 
 
@@ -70,7 +78,8 @@ class HueyExplorer:
         :return:
         """
         for queue in self.queues:
-            self._cache.add(queue)
+            if queue not in self._cache:
+                self._cache.add(queue)
         queues = self._cache.get()
         return queues
 
@@ -102,6 +111,10 @@ class ExpiringCache:
     def get(self) -> Set[HueyQueue]:
         self.clear_cache()
         return set(self.cache_dict.keys())
+
+    def __contains__(self, item: HueyQueue):
+        return item in self.get()
+
 
 
 
