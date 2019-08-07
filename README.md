@@ -1,7 +1,7 @@
 # Huey Prometheus Exporter
 This project provides metrics about the [huey task queue](https://github.com/coleifer/huey) for prometheus.
 
-Latest Version: **1.0.0**
+Latest Version: **1.0.1**
 
 
 ---
