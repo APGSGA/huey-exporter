@@ -30,6 +30,7 @@ class QueueLengthThread(Thread):
 
     def _report_queue(self, queue: HueyQueue):
         logger.info(f'Queue {queue.name} length {len(queue)}')
+        logger.info(f'Tasks: {queue.tasks}')
         for task, count in queue.tasks.items():
             TASK_COUNT_GAUGE.labels(queue_name=queue.name, task_name=task).set(count)
 

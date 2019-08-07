@@ -33,7 +33,6 @@ class EventListener:
 
     def handle_event(self, data: {}):
         try:
-            print(data)
             COUNTER.labels(data['queue'], data['task'], data['signal'], data['environment']).inc()
 
         except KeyError:

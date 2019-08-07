@@ -31,12 +31,13 @@ class HueyQueue:
     @property
     def tasks(self) -> Dict[str, int]:
         task_dict = {}
-        elements = self.redis.lrange(self.redis_key, 0, 0)
+        elements = self.redis.lrange(self.redis_key, 0, -1)
         for element in elements:
             message = pickle.loads(element)
-            if message.name not in task_dict:
-                task_dict[message.name] = 0
-            task_dict[message.name] += 1
+            task_name = message[1]
+            if task_name not in task_dict:
+                task_dict[task_name] = 0
+            task_dict[task_name] += 1
         return task_dict
 
 
@@ -46,7 +47,7 @@ class HueyExplorer:
     """
     _key_prefix = 'huey.redis.'
 
-    def __init__(self, pool: ConnectionPool, queue_cache_time=60):
+    def __init__(self, pool: ConnectionPool, queue_cache_time=60*60):
         """
         :param pool:
         :param queue_cache_time: cache time of queues in seconds.
