@@ -16,17 +16,21 @@ class QueueLengthThread(Thread):
         self.pull_time_in_seconds = pull_time_in_seconds
 
     def run(self):
-        logger.info('Started queue length thread')
-        while not self.stop:
+        try:
+            logger.info('Started queue length thread')
+            while not self.stop:
 
-            for queue in self.explorer.cached_queues:
-                self._report_queue(queue)
+                for queue in self.explorer.cached_queues:
+                    self._report_queue(queue)
 
-            for i in range(0, self.pull_time_in_seconds):
-                if self.stop:
-                    break
-                time.sleep(1)
+                for i in range(0, self.pull_time_in_seconds):
+                    if self.stop:
+                        break
+                    time.sleep(1)
+        except Exception as e:
+            logger.error(f'Error in QueueLengthThread. {e}')
         logger.info('Exit run method of thread')
+
 
     def _report_queue(self, queue: HueyQueue):
         logger.info(f'Queue {queue.name} length {len(queue)}')
