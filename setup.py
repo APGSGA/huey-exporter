@@ -13,6 +13,7 @@ setup(
             'prometheus_client>=0.2.0',
             'click>=6.7',
             'redis>=2.10.6',
+            'huey==2.1.0',
         ],
         entry_points={
           'console_scripts': [
