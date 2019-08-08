@@ -12,6 +12,11 @@ Latest Version: **1.0.1**
 
 ---
 
+### Requirements
+
+- [Huey](https://github.com/coleifer/huey)
+- [Hueyx](https://github.com/APGSGA/hueyx)
+
 ## Usage
 
 #### Installation
@@ -65,4 +70,21 @@ Labels: `'queue_name', 'task_name', 'signal', 'hueyx_environment'`.
 - `hueyx_queue_task_count`
 
 Labels: `'queue_name', 'task_name'`
-```
+
+---
+
+### Internals
+
+huey-exporter consists of two modules which work completely independent of each other.
+
+#### Signal listener
+
+The signal listener subscribes to the hueyx `hueyx.huey2.signaling` pubsub. Everytime [hueyx](https://github.com/APGSGA/hueyx) 
+receives a [huey signal](https://huey.readthedocs.io/en/latest/signals.html)
+the exporter receives it and increases the according prometheus counter.
+
+#### Queue length
+The second exporter module is the queue_length counter. The counter first tries to find huey queues on redis by
+watching all redis keys with the pattern `huey.redis.*`. The key only exists if the queue contains at least one element
+so it can take some time.
+The counter reads all tasks then and reports them to prometheus.

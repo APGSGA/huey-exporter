@@ -3,7 +3,7 @@ import redis
 from prometheus_client import start_http_server
 import signal
 
-from huey_exporter.EventListener import EventListener
+from huey_exporter.signal_listener import SignalListener
 from huey_exporter.exporter_logging import logger
 from huey_exporter.queue_length.thread import QueueLengthThread
 
@@ -44,7 +44,7 @@ def run_exporter(connection_string, port, logging_level):
 
     start_queue_length_monitoring(connection_pool)
 
-    queue = EventListener(connection_pool)
+    queue = SignalListener(connection_pool)
     queue.listen()
 
 

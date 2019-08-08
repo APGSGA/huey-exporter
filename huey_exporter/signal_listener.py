@@ -8,7 +8,7 @@ import json
 COUNTER = Counter('hueyx_signals', 'Huey task signals', ['queue_name', 'task_name', 'signal', 'hueyx_environment'])
 
 
-class EventListener:
+class SignalListener:
     QUEUE_NAME = 'hueyx.huey2.signaling'
 
     def __init__(self, connection_pool):
